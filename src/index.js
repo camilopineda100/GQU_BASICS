@@ -1,23 +1,5 @@
 import { GraphQLServer } from 'graphql-yoga'
-
-/**
- * Scalar types
- * 
- * ID
- * String
- * Int
- * Boolean
- * Float
- * 
- * ID! exclamation indications null is not valid, return error when null
- * 
- */
-
-/**
- * Object types / Custom types
- * 
- */
-
+import axios from 'axios'
 
 const server = new GraphQLServer({
     typeDefs: `
@@ -36,30 +18,15 @@ const server = new GraphQLServer({
     `,
     resolvers: {
         Query: {
-            agent() {
-                return {
-                    id: 1,
-                    name: 'Sebas',
-                    age: 27,
-                    married: true,
-                    average: 4.5
-                }
+            agent: async () => {
+                const response = await axios.get('http://localhost:3000/users/1') // getting data from a Rest API
+                return response.data
             },
-            agents() {
-                return [{
-                    id: 1,
-                    name: 'Sebas',
-                    age: 27,
-                    married: true,
-                    average: 4.5
-                },  {
-                    id: 2,
-                    name: 'Camilo',
-                    age: 27,
-                    married: true,
-                    average: 4.5
-                }]
+            agents: async () => {
+                const response = await axios.get('http://localhost:3000/users') // getting data from a Rest API
+                return response.data
             }
+            
         }
     }
 })

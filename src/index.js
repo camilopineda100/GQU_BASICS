@@ -8,8 +8,8 @@ const server = new GraphQLServer({
         type Query {
             agent(id: ID!): User
             agents(name: String, age: Int): [User]
-            cars: [String]
-            msg(values: [String!]!): String
+            posts: [Post!]!
+            post(id: ID!): Post
         }
 
         type User {
@@ -18,6 +18,13 @@ const server = new GraphQLServer({
             age: Int
             married: Boolean
             average: Float
+        }
+
+        type Post {
+            id: ID
+            title: String
+            content: String
+            author: User!
         }
     `,
     resolvers: {
@@ -30,18 +37,23 @@ const server = new GraphQLServer({
                 const name = args.name != null ? `name=${args.name}` : ''
                 const age = args.age != null ? `age=${args.age}` : ''
 
-                const response = await axios.get(`${dbUrl}/users?${name}&${age}`) // getting data from Fake Rest API 
+                const response = await axios.get(`${dbUrl}/users?${name}&${age}`)
                 return response.data
             },
-            cars: async () => {
-                return ['mazda', 'ford']
+            posts: async (parent, args, context, info) => {
+                const response = await axios.get(`${dbUrl}/posts`) 
+                return response.data
             },
-            msg: async (parent, args, context, info) => {
-                if(args.values.length === 0) {
-                    return 'Sorry no values'
-                }
-                return `Hello ${args.values[0]} ${args.values[1]}`
+            post: async (parent, args, context, info) => {
+                const response = await axios.get(`${dbUrl}/posts/${args.id}`)
+                return response.data
             }
+        },
+        Post: {
+            author: async (parent, args, context, info) => {
+                const response = await axios.get(`${dbUrl}/users/${parent.author}`)
+                return response.data
+            },
         }
     }
 })

@@ -37,6 +37,23 @@ const Mutation = {
             average: 0
         })
         return response.data
+    },
+    createPost: async (parent, args, context, info) => {
+        const response = await axios.post(`${dbUrl}/posts`, {
+            title: args.title,
+            content: args.content,
+            author: 1,
+            picture: 1
+        })
+        return response.data
+    },
+    deletePost: async (parent, args, context, info) => {
+        const response = await axios.delete(`${dbUrl}/posts/${args.id}`)
+
+        if(Object.keys(response.data).length === 0) {
+            return true
+        }
+        return false
     }
 }
 

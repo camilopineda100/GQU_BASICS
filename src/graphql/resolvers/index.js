@@ -28,6 +28,18 @@ const Query = {
     }
 }
 
+const Mutation = {
+    createAgent: async (parent, args, context, info) => {
+        const response = await axios.post(`${dbUrl}/users`, {
+            name: args.name,
+            age: args.age,
+            married: args.married,
+            average: 0
+        })
+        return response.data
+    }
+}
+
 const Post = {
     author: async (parent, args, context, info) => {
         const response = await axios.get(`${dbUrl}/users/${parent.author}`)
@@ -63,6 +75,7 @@ const Picture = {
 
 export {
     Query,
+    Mutation,
     Post,
     User,
     Picture

@@ -7,6 +7,10 @@ type Query {
     picture(id: ID!): Picture
 }
 
+type Mutation {
+    createAgent(name: String!, age: Int!, married: Boolean): User!
+}
+
 type User {
     id: ID
     name: String

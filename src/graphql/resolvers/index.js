@@ -60,11 +60,22 @@ const Mutation = {
 
         // find all posts and delete them
         // find all pictures and delete them
-        
+
         if(Object.keys(response.data).length === 0) {
             return true
         }
         return false
+    },
+    updateAgent: async (parent, args, context, info) => {
+        const data = {}
+        if(args.name !== undefined) { data.name = args.name }
+        if(args.age !== undefined) { data.age = args.age }
+        if(args.married !== undefined) { data.married = args.married }
+        if(args.average !== undefined) { data.average = args.average }
+
+        const response = await axios.patch(`${dbUrl}/users/${args.id}`, data)
+
+        return response.data
     }
 }
 

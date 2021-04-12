@@ -54,13 +54,28 @@ const Mutation = {
             return true
         }
         return false
+    },
+    deleteAgent: async (parent, args, context, info) => {
+        const response = await axios.delete(`${dbUrl}/users/${args.id}`)
+
+        // find all posts and delete them
+        // find all pictures and delete them
+        
+        if(Object.keys(response.data).length === 0) {
+            return true
+        }
+        return false
     }
 }
 
 const Post = {
     author: async (parent, args, context, info) => {
-        const response = await axios.get(`${dbUrl}/users/${parent.author}`)
-        return response.data
+        try {
+            const response = await axios.get(`${dbUrl}/users/${parent.author}`)
+            return response.data
+        } catch (e) {
+            return null
+        } 
     },
     picture: async (parent, args, context, info) => {
         const response = await axios.get(`${dbUrl}/pictures/${parent.picture}`)

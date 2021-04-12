@@ -11,6 +11,7 @@ type Mutation {
     createAgent(name: String!, age: Int!, married: Boolean): User!
     createPost(title: String!, content: String!): Post!
     deletePost(id: ID): Boolean!
+    deleteAgent(id: ID): Boolean!
 }
 
 type User {
